@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="test" content="test">
+    <title>Exercise 3</title>
+</head>
+<body>
+    <h1>生成1到100之间的随机整数</h1>
+    <p id="randomNumber"></p>
+
+    <!-- 引入外部的 JavaScript 文件 -->
+    <script src="randominteger.js"></script>
+    <script>
+        // 调用 randomInt 函数并将结果显示在页面上
+        document.getElementById('randomNumber').textContent = '随机整数: ' + randomInt();
+    </script>
+    <p></p>
+    <p><a href="index.html">Go back to index</a></p>
+</body>
+</html>

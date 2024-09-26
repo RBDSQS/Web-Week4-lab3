@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="test" content="test">
+    <title>数字猜谜游戏</title>
+    <style>
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>数字猜谜游戏</h1>
+    <p>请猜一个 1 到 100 之间的数字：</p>
+    <input type="text" id="guessField" />
+    <button id="submitGuess">提交猜测</button>
+    <p id="feedback"></p>
+    <p id="previousGuesses"></p>
+    <p id="remainrounds"></p>
+    <button id="restartButton" class="hidden">重新开始</button>
+
+    <script src="randominteger.js"></script>
+    <script>
+        let randomNumber = randomRange(1, 100); // 生成1到100之间的随机数
+        let remainrounds = 10; // 玩家有10次机会
+        let previousGuesses = []; // 记录玩家的猜测
+        let gameOver = false;
+
+        let guessField = document.getElementById('guessField');
+        let feedback = document.getElementById('feedback');
+        let previousGuessesDisplay = document.getElementById('previousGuesses');
+        let remainroundsDisplay = document.getElementById('remainrounds');
+        let restartButton = document.getElementById('restartButton');
+
+        document.getElementById('submitGuess').addEventListener('click', function() {
+            if (gameOver) return; // 如果游戏结束，不再处理新的猜测
+
+            let userGuess = Number(guessField.value); // 获取玩家输入的猜测
+            if (!userGuess || userGuess < 1 || userGuess > 100) {
+                feedback.textContent = '请输入 1 到 100 之间的有效数字！';
+                return;
+            }
+
+            previousGuesses.push(userGuess); // 记录玩家的猜测
+            remainrounds--; // 减少剩余次数
+
+            // 更新显示内容
+            previousGuessesDisplay.textContent = '你已经猜过的数字: ' + previousGuesses;
+            remainroundsDisplay.textContent = '剩余的机会: ' + remainrounds;
+
+            if (userGuess === randomNumber) {
+                feedback.textContent = '恭喜你，猜对了！';
+                gameOver = true; // 游戏结束
+                endGame();
+            } else if (remainrounds === 0) {
+                feedback.textContent = '很遗憾，你用完了所有机会！正确的数字是 ' + randomNumber;
+                gameOver = true; // 游戏结束
+                endGame();
+            } else if (userGuess < randomNumber) {
+                feedback.textContent = '猜低了！再试一次。';
+            } else {
+                feedback.textContent = '猜高了！再试一次。';
+            }
+
+            guessField.value = ''; // 清空输入框
+            guessField.focus(); // 让输入框重新获得焦点
+        });
+
+        function endGame() {
+            guessField.disabled = true; // 禁用输入框
+            restartButton.classList.remove('hidden'); // 显示重新开始按钮
+        }
+
+        restartButton.addEventListener('click', function() {
+            // 重置游戏
+            remainrounds = 10;
+            previousGuesses = [];
+            randomNumber = randomRange(1, 100);
+            gameOver = false;
+
+            feedback.textContent = '';
+            previousGuessesDisplay.textContent = '';
+            remainroundsDisplay.textContent = '';
+            guessField.disabled = false;
+            restartButton.classList.add('hidden'); // 隐藏重新开始按钮
+            guessField.focus(); // 让输入框重新获得焦点
+        });
+    </script>
+    <p></p>
+    <p><a href="index.html">Go back to index</a></p>
+</body>
+</html>
